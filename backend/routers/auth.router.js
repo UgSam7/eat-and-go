@@ -66,25 +66,26 @@ router.get('/me', authentication, async (req, res, next) => {
 });
 
 router.get(
-    '/login-google',
-    passport.authenticate('google', { scope: ['profile', 'email'] })
+  '/login-google',
+  passport.authenticate('google', { scope: ['profile', 'email'] })
 );
 
-router.get(
-    '/callback-google',
-    passport.authenticate('google', { session: false }),
-    (request, response, next) => {
-        response.redirect(
-            process.env.FRONTEND_HOST +
-                process.env.OAUTH_PATH_FRONTEND +
-                '?jwt=' +
-                request.user.jwt
-        );
+router.get('/google/callback', (req, res, next) => {
+  passport.authenticate('google', { session: false }, (err, data) => {
+    if (err || !data) {
+      return res.redirect(`${process.env.FRONTEND_URL}/login?error=oauth_failed`);
     }
-);
+
+    const { jwt } = data;
+
+    return res.redirect(`${process.env.FRONTEND_URL}/login?token=${jwt}`);
+
+    return res.redirect(`${process.env.FRONTEND_URL}/login?token=${token}`);
+  })(req, res, next);
+});
 
 router.get('/me', authentication, (request, response, next) => {
-    response.send(request.authUser);
+  response.send(request.authUser);
 });
 
 export default router;

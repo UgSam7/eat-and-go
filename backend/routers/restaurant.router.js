@@ -1,116 +1,61 @@
-import express from 'express';
-import createHttpError from 'http-errors';
+import { Router } from 'express';
 import Restaurant from '../models/Restaurant.js';
-import { cloudinary, uploadCloudinary } from '../middlewares/uploadCloudinary.js';
 import authentication from '../middlewares/authentication.js';
 
-const router = express.Router();
+const router = Router();
 
-// GET: lista ristoranti (pubblico, senza autenticazione)
+// GET tutti i ristoranti
 router.get('/', async (req, res, next) => {
-    try {
-        const restaurants = await Restaurant.find().sort({ name: 1 });
-        res.send(restaurants);
-    } catch (error) {
-        next(createHttpError.InternalServerError(error));
-    }
+  try {
+    const restaurants = await Restaurant.find();
+    res.send(restaurants);
+  } catch (error) {
+    next(error);
+  }
 });
 
-// GET: ristorante singolo (pubblico)
-router.get('/:restaurantId', async (req, res, next) => {
-    try {
-        const restaurant = await Restaurant.findById(req.params.restaurantId);
-        if (!restaurant) return next(createHttpError.NotFound('Ristorante non trovato'));
-        res.send(restaurant);
-    } catch (error) {
-        next(createHttpError.InternalServerError(error));
-    }
+// GET singolo ristorante per id
+router.get('/:id', async (req, res, next) => {
+  try {
+    const restaurant = await Restaurant.findById(req.params.id);
+    if (!restaurant) return res.status(404).send({ message: 'Ristorante non trovato' });
+    res.send(restaurant);
+  } catch (error) {
+    next(error);
+  }
 });
 
-// POST: crea ristorante (protetto da autenticazione)
-router.post(
-    '/',
-    authentication, // <-- qui aggiungi il middleware
-    uploadCloudinary.single('image'),
-    async (req, res, next) => {
-        try {
-            const restaurantData = {
-                ...req.body,
-                owner: req.authUser._id, // associamo il ristorante all'utente loggato
-                image: req.file
-                    ? {
-                          path: req.file.path,
-                          filename: req.file.filename,
-                      }
-                    : null,
-            };
+// POST nuovo ristorante (serve login)
+router.post('/', authentication, async (req, res, next) => {
+  try {
+    const newRestaurant = new Restaurant({ ...req.body, createdBy: req.authUser.userId });
+    const savedRestaurant = await newRestaurant.save();
+    res.status(201).send(savedRestaurant);
+  } catch (error) {
+    next(error);
+  }
+});
 
-            const newRestaurant = await Restaurant.create(restaurantData);
-            res.send(newRestaurant);
-        } catch (error) {
-            next(createHttpError.InternalServerError(error));
-        }
-    }
-);
+// PUT modifica ristorante (serve login)
+router.put('/:id', authentication, async (req, res, next) => {
+  try {
+    const updated = await Restaurant.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    if (!updated) return res.status(404).send({ message: 'Ristorante non trovato' });
+    res.send(updated);
+  } catch (error) {
+    next(error);
+  }
+});
 
-// PATCH: modifica ristorante (protetto)
-router.patch(
-    '/:restaurantId',
-    authentication, // <-- proteggi anche questa rotta
-    uploadCloudinary.single('image'),
-    async (req, res, next) => {
-        try {
-            // Per sicurezza, potresti verificare che req.authUser sia il proprietario
-            const restaurant = await Restaurant.findById(req.params.restaurantId);
-            if (!restaurant) return next(createHttpError.NotFound('Ristorante non trovato'));
-
-            if (!restaurant.owner.equals(req.authUser._id)) {
-                return next(createHttpError.Forbidden('Non autorizzato'));
-            }
-
-            const updateData = {
-                ...req.body,
-                image: req.file
-                    ? {
-                          path: req.file.path,
-                          filename: req.file.filename,
-                      }
-                    : restaurant.image,
-            };
-
-            const updatedRestaurant = await Restaurant.findByIdAndUpdate(
-                req.params.restaurantId,
-                updateData,
-                { new: true }
-            );
-
-            res.send(updatedRestaurant);
-        } catch (error) {
-            next(createHttpError.InternalServerError(error));
-        }
-    }
-);
-
-// DELETE: elimina ristorante (protetto)
-router.delete(
-    '/:restaurantId',
-    authentication, // <-- anche qui serve
-    async (req, res, next) => {
-        try {
-            const restaurant = await Restaurant.findById(req.params.restaurantId);
-            if (!restaurant) return next(createHttpError.NotFound('Ristorante non trovato'));
-
-            if (!restaurant.owner.equals(req.authUser._id)) {
-                return next(createHttpError.Forbidden('Non autorizzato'));
-            }
-
-            await Restaurant.findByIdAndDelete(req.params.restaurantId);
-
-            res.send({ message: 'Ristorante eliminato' });
-        } catch (error) {
-            next(createHttpError.InternalServerError(error));
-        }
-    }
-);
+// DELETE ristorante (serve login)
+router.delete('/:id', authentication, async (req, res, next) => {
+  try {
+    const deleted = await Restaurant.findByIdAndDelete(req.params.id);
+    if (!deleted) return res.status(404).send({ message: 'Ristorante non trovato' });
+    res.send({ message: 'Ristorante eliminato' });
+  } catch (error) {
+    next(error);
+  }
+});
 
 export default router;

@@ -1,43 +1,67 @@
 import { model, Schema } from 'mongoose';
 
-const userSchema = new Schema({
-    firstName: {
-        type: String,
-        required: true, 
-        minlength: 2, 
-        maxlength: 15, 
+const restaurantSchema = new Schema({
+  name: {
+    type: String,
+    required: true,
+    minlength: 2,
+    maxlength: 50,
+    trim: true,
+  },
+  description: {
+    type: String,
+    maxlength: 500,
+    trim: true,
+  },
+  address: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  city: {
+    type: String,
+    required: true,
+    trim: true,
+    minlength: 2,
+    maxlength: 30,
+  },
+  region: {
+    type: String,
+    required: true,
+    trim: true,
+    minlength: 2,
+    maxlength: 30,
+  },
+  phone: {
+    type: String,
+    trim: true,
+    maxlength: 20,
+  },
+  email: {
+    type: String,
+    lowercase: true,
+    trim: true,
+    match: [
+      /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/,
+      'Please fill a valid email address',
+    ],
+  },
+  website: {
+    type: String,
+    trim: true,
+  },
+  image: {
+    type: {
+      path: String,
+      filename: String,
     },
-    lastName: {
-        type: String,
-        trim: true,
-        minlength: 2,
-        maxlength: 15,
-    },
-    email: {
-        type: String,
-        required: true,
-        unique: true, 
-        lowercase: true, 
-        trim: true,
-        match: [
-            /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/,
-            'Please fill a valid email address',
-        ], 
-    },
-    password: {
-        type: String,
-        select: false, 
-    },
-    profile: {
-        type: {
-            path: String,
-            filename: String,
-        },
-    },
-    googleId: String,
-    facebookId: String,
+  },
+  createdBy: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+  },
 });
 
-const User = model('User', userSchema);
+const Restaurant = model('Restaurant', restaurantSchema);
 
-export default User;
+export default Restaurant;

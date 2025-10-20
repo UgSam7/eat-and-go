@@ -6,7 +6,10 @@ import { Col, Container, Row } from 'react-bootstrap';
 import Footer from './components/Footer.jsx';
 import Home from './pages/Home.jsx';
 import MySidebar from './components/MySidebar.jsx';
-import Restaurant from './pages/Restaurant.jsx';
+import Login from './pages/Login.jsx';
+import Register from './pages/Register.jsx';
+import RestaurantList from './pages/RestaurantList.jsx';
+import RestaurantDetail from './pages/RestaurantDetail.jsx';
 
 
 
@@ -18,30 +21,38 @@ function App() {
       <Header />
       <Container>
         <Row>
-          <Col md = {9}>
-            
+          <Col md={9}>
+
             <Routes>
+
+              <Route path="/login" element={<Login />} />
+
+              <Route path="/register" element={<Register />} />
 
               <Route path='/' element={<Home />} />
 
-              <Route path='/restaurants' element={<Restaurant />}/>
+              <Route path="/restaurants" element={<RestaurantList />} />
 
-            
+              <Route path="/restaurants/:id" element={<RestaurantDetail />} />
 
             </Routes>
+
+
+
+
           </Col>
 
-          <Col md = {3}>
+          <Col md={3}>
             <MySidebar />
 
-          
+
           </Col>
-          
-          
+
+
 
         </Row>
 
-        
+
 
 
 
@@ -49,8 +60,8 @@ function App() {
 
       <Footer />
 
-      
-    
+
+
 
     </BrowserRouter>
   )
