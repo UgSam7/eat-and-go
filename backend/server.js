@@ -1,19 +1,31 @@
+import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
-import 'dotenv/config';
 import userRouter from './routers/user.router.js';
-
+import mongoose from 'mongoose';
+import restaurantsRouter from './routers/restaurant.router.js';
+import passport from 'passport';
+import strategyGoogle from './config/passport.config.js';
 
 
 const server = express();
 const port = process.env.PORT;
+
+passport.use(strategyGoogle);
 
 server.use (cors());
 server.use (express.json())
 
 server.get ('/api', (request, response) => response.send ('Hello World!'));
 
-server.use('/api/users', userRouter);
+server.use('/api/v1/users', userRouter);
+server.use('/restaurants', restaurantsRouter);
+server.use('/api/v1/register', userRouter)
+server.use('/api/v1/login', userRouter)
+
+await mongoose
+  .connect (process.env.MONGODB_CONNECTION_URI)
+  .then (() => console.log ('Connessi al database'));
 
 
 

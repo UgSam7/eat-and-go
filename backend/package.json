@@ -3,19 +3,29 @@
   "version": "1.0.0",
   "main": "server.js",
   "type": "module",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon server.js"
-  },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
+  "scripts": {
+    "dev": "nodemon server.js"
+  },
   "dependencies": {
+    "bcrypt": "^6.0.0",
+    "cloudinary": "^1.41.3",
     "cors": "^2.8.5",
-    "dotenv": "^17.2.2",
+    "dotenv": "^17.2.1",
     "express": "^5.1.0",
-    "mongoose": "^8.18.2"
+    "html-to-text": "^9.0.5",
+    "http-errors": "^2.0.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.18.0",
+    "morgan": "^1.10.1",
+    "multer": "^2.0.2",
+    "multer-storage-cloudinary": "^4.0.0",
+    "nodemailer": "^7.0.9",
+    "passport": "^0.7.0",
+    "passport-google-oauth20": "^2.0.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.10"
