@@ -1,0 +1,65 @@
+/* 🌈 FONT BASE */
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #fafafa;
+  color: #212529;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* 🌙 Tema scuro automatico */
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #121212;
+    color: #f1f1f1;
+  }
+  .restaurant-card {
+    background: linear-gradient(180deg, #1c1c1c 0%, #2a2a2a 100%) !important;
+  }
+  .restaurant-card .text-muted {
+    color: #b5b5b5 !important;
+  }
+  .restaurant-card .btn-dark {
+    background: linear-gradient(135deg, #444, #222) !important;
+  }
+}
+
+/* 🧁 CARD HOVER EFFECTS */
+.restaurant-card-wrapper {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.restaurant-card-wrapper:hover {
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.restaurant-card:hover .restaurant-img {
+  transform: scale(1.05);
+}
+
+.restaurant-img {
+  transition: transform 0.3s ease;
+}
+
+/* ✨ BOTTONI */
+.btn-dark {
+  background: linear-gradient(135deg, #212529, #444);
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.btn-dark:hover {
+  background: linear-gradient(135deg, #000, #333);
+  transform: translateY(-1px);
+}
+
+/* 🌸 CARD BASE */
+.restaurant-card {
+  border-radius: 1.2rem !important;
+  overflow: hidden;
+  background: linear-gradient(180deg, #fff 0%, #f8f8f8 100%);
+  transition: all 0.3s ease;
+}
+
+.restaurant-card:hover {
+  transform: translateY(-3px);
+}

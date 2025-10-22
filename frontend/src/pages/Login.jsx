@@ -1,73 +1,93 @@
-import { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useAuth } from "../context/AuthContext";
 
-const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const { login } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
 
-   useEffect(() => {
-  const params = new URLSearchParams(location.search);
-  const tokenFromUrl = params.get('token');
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const tokenFromUrl = params.get("token");
 
-  if (tokenFromUrl) {
-    localStorage.setItem('token', tokenFromUrl);
-    navigate('/home'); 
-  }
-}, []);
+    if (tokenFromUrl) {
+      login(tokenFromUrl);
+      navigate("/");
+    }
+  }, [location.search, login, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
-      const res = await axios.post('http://localhost:4001/api/auth/login', {
+      const res = await axios.post("http://localhost:4001/api/auth/login", {
         email,
         password,
       });
 
-      localStorage.setItem('token', res.data.token);
-      navigate('/home');
+      console.log("Risposta login:", res.data);
+
+      if (res.data.token) {
+        login(res.data.token); 
+        navigate("/");
+      } else {
+        alert("Errore: token non ricevuto dal server.");
+      }
     } catch (error) {
-      console.error('Login fallito:', error);
-      alert('Email o password errati');
+      console.error("Errore nel login:", error);
+      alert("Email o password errati.");
     }
   };
 
   return (
-    <div>
-      <h2>Login</h2>
+    <div className="container mt-5" style={{ maxWidth: "400px" }}>
+      <h2 className="text-center mb-4">Accedi</h2>
 
       <form onSubmit={handleSubmit}>
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="Email"
-          required
-        />
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Password"
-          required
-        />
-        <button type="submit">Login</button>
+        <div className="mb-3">
+          <input
+            type="email"
+            className="form-control"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+        </div>
+
+        <div className="mb-3">
+          <input
+            type="password"
+            className="form-control"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        </div>
+
+        <button type="submit" className="btn btn-primary w-100">
+          Login
+        </button>
       </form>
 
       <hr />
 
       <button
+        className="btn btn-danger w-100"
         onClick={() =>
-          window.location.href = 'http://localhost:4001/api/auth/login-google'
+          (window.location.href =
+            "http://localhost:4001/api/auth/login-google")
         }
       >
         Login con Google
       </button>
     </div>
   );
-};
+}
 
 export default Login;
-

@@ -7,6 +7,7 @@ import restaurantsRouter from './routers/restaurant.router.js';
 import passport from 'passport';
 import strategyGoogle from './config/passport.config.js';
 import authRouter from './routers/auth.router.js';
+import authentication from './middlewares/authentication.js';
 
 const server = express();
 const port = process.env.PORT;
@@ -17,12 +18,11 @@ server.use(cors());
 server.use(express.json());
 
 
-server.get('/api', (request, response) => response.send('Hello World!'));
+server.get('/api', (request, response) => response.send());
 
 server.use('/api/v1/users', userRouter);
-server.use('/restaurants', restaurantsRouter);
+server.use('/api/restaurants', authentication, restaurantsRouter);
 server.use('/api/auth', authRouter);
-server.use('/restaurants', restaurantsRouter);
 
 
 await mongoose

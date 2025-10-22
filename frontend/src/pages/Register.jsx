@@ -4,34 +4,32 @@ import axios from 'axios';
 
 const Register = () => {
   const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName]  = useState('');
-  const [email, setEmail]        = useState('');
-  const [password, setPassword]  = useState('');
-
+  const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('http://localhost:4001/api/auth/register', {
+      await axios.post('/api/auth/register', {
         firstName,
         lastName,
         email,
-        password
+        password,
       });
 
-      localStorage.setItem('token', res.data.token);
-      navigate('/home');
+      alert('Registrazione completata! Effettua il login.');
+      navigate('/login');
     } catch (error) {
       console.error('Registrazione fallita:', error);
-      alert('Errore durante la registrazione.');
+      alert(error.response?.data?.message || 'Errore durante la registrazione.');
     }
   };
 
   return (
     <div>
       <h2>Registrati</h2>
-
       <form onSubmit={handleSubmit}>
         <input
           type="text"
@@ -61,7 +59,6 @@ const Register = () => {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-
         <button type="submit">Registrati</button>
       </form>
     </div>

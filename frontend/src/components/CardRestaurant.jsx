@@ -1,27 +1,35 @@
-import { Card, Button } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
+import { Card, Button } from "react-bootstrap";
 
 const CardRestaurant = ({ restaurant }) => {
-  const navigate = useNavigate();
-
-  const handleClick = () => {
-    navigate(`/restaurants/${restaurant._id}`);
-  };
+  const image =
+    restaurant.image?.url ||
+    restaurant.image?.path ||
+    "/placeholder.jpg";
 
   return (
-    <Card onClick={handleClick} className="mb-3 shadow-sm" style={{ cursor: 'pointer' }}>
-      <Card.Img variant="top" src={restaurant.image.url} alt={restaurant.name} />
-      <Card.Body>
-        <Card.Title>{restaurant.name}</Card.Title>
-        <Card.Text>
-          {restaurant.city}, {restaurant.region}
+    <Card className="restaurant-card-wrapper shadow-lg">
+      <Card.Img
+        variant="top"
+        src={image}
+        alt={restaurant.name}
+        className="restaurant-img"
+      />
+      <Card.Body className="restaurant-card-body">
+        <Card.Title className="restaurant-card-title">
+          {restaurant.name}
+        </Card.Title>
+        <Card.Text className="restaurant-card-description">
+          {restaurant.description}
         </Card.Text>
-        <Button variant="primary" onClick={handleClick}>Scopri di più</Button>
+        <Card.Text className="text-muted small mb-2">
+          📍 {restaurant.address}
+        </Card.Text>
+        <Button variant="dark" className="restaurant-btn">
+          Scopri di più
+        </Button>
       </Card.Body>
     </Card>
   );
 };
 
 export default CardRestaurant;
-
-
