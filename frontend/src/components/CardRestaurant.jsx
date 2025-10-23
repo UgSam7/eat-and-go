@@ -10,9 +10,9 @@ const CardRestaurant = ({ restaurant }) => {
     <Card className="restaurant-card-wrapper shadow-lg">
       <Card.Img
         variant="top"
-        src={image}
+        classname="restaurant-img"
+        src={restaurant.image?.url || "/placeholder.jpg"}
         alt={restaurant.name}
-        className="restaurant-img"
       />
       <Card.Body className="restaurant-card-body">
         <Card.Title className="restaurant-card-title">

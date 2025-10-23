@@ -1,0 +1,216 @@
+/* ===========================
+   🎨 BASE STYLE
+=========================== */
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #fafafa;
+  color: #212529;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  min-height: 100vh;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #121212;
+    color: #f1f1f1;
+  }
+
+  .restaurant-card {
+    background: linear-gradient(180deg, #1c1c1c 0%, #2a2a2a 100%) !important;
+  }
+
+  .restaurant-card .text-muted {
+    color: #b5b5b5 !important;
+  }
+
+  .restaurant-card .btn-dark {
+    background: linear-gradient(135deg, #444, #222) !important;
+  }
+}
+
+/* ===========================
+   🍝 RESTAURANT CARDS
+=========================== */
+.restaurant-card-wrapper {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.restaurant-card-wrapper:hover {
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.restaurant-img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  object-position: center;
+  transition: transform 0.3s ease;
+  border-bottom: 1px solid #eaeaea;
+}
+
+.restaurant-card:hover .restaurant-img {
+  transform: scale(1.05);
+}
+
+.btn-dark {
+  background: linear-gradient(135deg, #212529, #444);
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.btn-dark:hover {
+  background: linear-gradient(135deg, #000, #333);
+  transform: translateY(-1px);
+}
+
+.restaurant-card {
+  border-radius: 1.2rem !important;
+  overflow: hidden;
+  background: linear-gradient(180deg, #fff 0%, #f8f8f8 100%);
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.restaurant-card .card-body {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 180px;
+}
+
+.restaurant-card .card-title {
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+}
+
+.restaurant-card .card-text {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.card:hover {
+  transform: scale(1.02);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* ===========================
+   🏙️ RESTAURANT LIST PAGE
+=========================== */
+.restaurant-list-container {
+  padding: 40px 0;
+  background: linear-gradient(180deg, #fff 0%, #f9f9f9 100%);
+}
+
+.restaurant-list-title {
+  font-weight: 700;
+  text-align: center;
+  font-size: 2rem;
+  color: #ff7b00;
+  margin-bottom: 2rem;
+}
+
+.restaurant-list-empty {
+  background-color: #fff3cd;
+  color: #856404;
+  padding: 1rem;
+  border-radius: 10px;
+  text-align: center;
+}
+
+/* ===========================
+   🏠 HOME PAGE
+=========================== */
+.home-hero {
+  position: relative;
+  height: 80vh;
+  background-image: url('https://images.unsplash.com/photo-1504674900247-0877df9cc836');
+  background-size: cover;
+  background-position: center;
+  border-radius: 20px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.home-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+}
+
+.home-hero-content {
+  position: relative;
+  color: white;
+  text-align: center;
+  z-index: 2;
+  max-width: 700px;
+}
+
+.home-hero h1 {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.home-hero p {
+  font-size: 1.25rem;
+  color: #f8f8f8;
+  margin-bottom: 2rem;
+}
+
+.home-hero .btn {
+  font-size: 1.1rem;
+  padding: 0.75rem 2rem;
+  border-radius: 30px;
+  background: linear-gradient(135deg, #ff7b00, #ffb300);
+  border: none;
+  color: #fff;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.home-hero .btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(255, 123, 0, 0.4);
+}
+
+/* Sezione descrizione */
+.home-description {
+  margin-top: 60px;
+  text-align: center;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.home-description h2 {
+  color: #ff7b00;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.home-description p {
+  font-size: 1.1rem;
+  color: #555;
+  line-height: 1.6;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .home-hero h1 {
+    font-size: 2rem;
+  }
+  .home-hero p {
+    font-size: 1rem;
+  }
+}

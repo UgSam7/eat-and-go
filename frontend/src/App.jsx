@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import "./global.css";
+import './styles/global.css'
 import Header from './components/Header.jsx'
 import { BrowserRouter, Route, Routes } from 'react-router';
 import { Col, Container, Row } from 'react-bootstrap';

@@ -21,7 +21,7 @@ server.use(express.json());
 server.get('/api', (request, response) => response.send());
 
 server.use('/api/v1/users', userRouter);
-server.use('/api/restaurants', authentication, restaurantsRouter);
+server.use('/api/restaurants', restaurantsRouter);
 server.use('/api/auth', authRouter);
 
 

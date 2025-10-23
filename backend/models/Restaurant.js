@@ -10,6 +10,7 @@ const restaurantSchema = new Schema({
   region: { type: String, required: true },
   website: String,
   image: {
+    url: String,
     path: String,
     filename: String,
   },
