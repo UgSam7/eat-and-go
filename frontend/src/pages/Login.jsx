@@ -82,7 +82,7 @@ return (
       className="btn btn-danger w-100"
       onClick={() =>
       (window.location.href =
-        "http://localhost:4001/api/auth/login-google")
+        "https://eat-and-go-five.vercel.app//api/auth/login-google")
       }
     >
       Login con Google

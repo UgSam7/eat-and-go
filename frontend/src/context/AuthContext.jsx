@@ -25,7 +25,7 @@ export const AuthProvider = ({ children }) => {
         return;
       }
       try {
-        const res = await axiosInstance.get("/auth/me");
+        const res = await axiosInstance.get("/api/auth/me");
         setUser(res.data);
       } catch (error) {
         console.error("Errore nel recupero utente:", error);
