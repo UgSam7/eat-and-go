@@ -10,9 +10,18 @@ function Profile() {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/auth/me`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        // ✅ Recupera il token dallo stato o dal localStorage
+        const storedToken = token || localStorage.getItem("token");
+        if (!storedToken) return;
+
+        // ✅ Effettua la chiamata API con il token corretto
+        const res = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/auth/me`,
+          {
+            headers: { Authorization: `Bearer ${storedToken}` },
+          }
+        );
+
         setUser(res.data);
       } catch (err) {
         console.error("Errore nel caricamento del profilo:", err);
@@ -20,11 +29,13 @@ function Profile() {
       }
     };
 
-    if (token) fetchProfile();
+    fetchProfile();
   }, [token]);
 
   if (error)
-    return <div className="alert alert-danger mt-5 text-center">{error}</div>;
+    return (
+      <div className="alert alert-danger mt-5 text-center">{error}</div>
+    );
 
   if (!user)
     return <div className="text-center mt-5">Caricamento profilo...</div>;

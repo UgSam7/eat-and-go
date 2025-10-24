@@ -4,10 +4,13 @@ import axios from "axios";
 const AuthContext = createContext(null);
 const API_URL = import.meta.env.VITE_API_URL;
 
+// ✅ Creiamo un'istanza Axios con baseURL completo
 const axiosInstance = axios.create({
-  baseURL: API_URL
+  baseURL: `${API_URL}/api`,
 });
-axiosInstance.interceptors.request.use(config => {
+
+// ✅ Intercettore per aggiungere automaticamente il token
+axiosInstance.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
   if (token) config.headers.Authorization = `Bearer ${token}`;
   return config;
@@ -24,8 +27,10 @@ export const AuthProvider = ({ children }) => {
         setLoading(false);
         return;
       }
+
       try {
-        const res = await axiosInstance.get("/api/auth/me");
+        // ✅ Ora la chiamata è uniforme
+        const res = await axiosInstance.get("/auth/me");
         setUser(res.data);
       } catch (error) {
         console.error("Errore nel recupero utente:", error);
@@ -37,14 +42,20 @@ export const AuthProvider = ({ children }) => {
     checkAuth();
   }, []);
 
-  const login = (token) => {
+  // ✅ Login che salva token e ricarica i dati utente
+  const login = async (token) => {
     localStorage.setItem("token", token);
-    axiosInstance.get("/api/auth/me").then(res => setUser(res.data)).catch(() => {
+    try {
+      const res = await axiosInstance.get("/auth/me");
+      setUser(res.data);
+    } catch (error) {
+      console.error("Errore nel login:", error);
       localStorage.removeItem("token");
       setUser(null);
-    });
+    }
   };
 
+  // ✅ Logout pulito
   const logout = () => {
     localStorage.removeItem("token");
     setUser(null);
