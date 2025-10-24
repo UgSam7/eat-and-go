@@ -24,71 +24,68 @@ function Login() {
     e.preventDefault();
 
     try {
-      const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/login`, {
-        email,
-        password,
-      });
-    
+      const res = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/auth/login`,
+        { email, password }
+      );
 
-    console.log("Risposta login:", res.data);
+      console.log("Risposta login:", res.data);
 
-    if (res.data.token) {
-      login(res.data.token);
-      navigate("/");
-    } else {
-      alert("Errore: token non ricevuto dal server.");
-    }
-  } catch (error) {
-    console.error("Errore nel login:", error);
-    alert("Email o password errati.");
-  }
-};
-
-return (
-  <div className="container mt-5" style={{ maxWidth: "400px" }}>
-    <h2 className="text-center mb-4">Accedi</h2>
-
-    <form onSubmit={handleSubmit}>
-      <div className="mb-3">
-        <input
-          type="email"
-          className="form-control"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-      </div>
-
-      <div className="mb-3">
-        <input
-          type="password"
-          className="form-control"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-      </div>
-
-      <button type="submit" className="btn btn-primary w-100">
-        Login
-      </button>
-    </form>
-
-    <hr />
-
-    <button
-      className="btn btn-danger w-100"
-      onClick={() =>
-      (window.location.href =
-        "https://eat-and-go-five.vercel.app//api/auth/login-google")
+      if (res.data.token) {
+        login(res.data.token);
+        navigate("/");
+      } else {
+        alert("Errore: token non ricevuto dal server.");
       }
-    >
-      Login con Google
-    </button>
-  </div>
-);
+    } catch (error) {
+      console.error("Errore nel login:", error);
+      alert("Email o password errati.");
+    }
+  };
+
+  const handleGoogleLogin = () => {
+    window.location.href = `${import.meta.env.VITE_API_URL}/api/auth/login-google`;
+  };
+
+  return (
+    <div className="container mt-5" style={{ maxWidth: "400px" }}>
+      <h2 className="text-center mb-4">Accedi</h2>
+
+      <form onSubmit={handleSubmit}>
+        <div className="mb-3">
+          <input
+            type="email"
+            className="form-control"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+        </div>
+
+        <div className="mb-3">
+          <input
+            type="password"
+            className="form-control"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        </div>
+
+        <button type="submit" className="btn btn-primary w-100">
+          Login
+        </button>
+      </form>
+
+      <hr />
+
+      <button className="btn btn-danger w-100" onClick={handleGoogleLogin}>
+        Login con Google
+      </button>
+    </div>
+  );
 }
 
 export default Login;
