@@ -16,7 +16,6 @@ const restaurantSchema = new Schema({
   },
   cuisineType: {
     type: String,
-    
     enum: [
       "Italiana",
       "Giapponese",
@@ -27,9 +26,8 @@ const restaurantSchema = new Schema({
       "Internazionale",
       "Altro"
     ],
-    default: "Altro",
-    lowercase: true,
-    trim: true
+    set: v => v.charAt(0).toUpperCase() + v.slice(1).toLowerCase(), // normalizza input
+    default: "Altro"
   },
   image: {
     url: String,
