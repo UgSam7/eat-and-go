@@ -405,6 +405,7 @@ main {
   color: #d35400 !important;
 }
 
+/* === LAYOUT RESPONSIVE AGGIORNATO === */
 .layout-container {
   display: flex;
   min-height: 100vh;
@@ -412,52 +413,8 @@ main {
 }
 
 .sidebar-container {
-  position: sticky;
-  top: 95px; /* stessa altezza dell'header */
-  z-index: 900; /* sotto l’header (che probabilmente ha 1030 o più) */
-  height: calc(100vh - 95px); /* evita che si estenda sopra l’header */
-  overflow-y: auto;
-  background: linear-gradient(180deg, #ff7b00, #ffb300);
-  color: white;
-  padding: 1.5rem 1rem;
-  display: flex;
-  flex-direction: column;
-  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.15);
-  border-right: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.sidebar-container .accordion-item,
-.sidebar-container .accordion-body,
-.sidebar-container .accordion-button,
-.sidebar-container .accordion-collapse {
-  background: transparent !important;
-  color: #fff !important;
-  border: none !important;
-  box-shadow: none !important;
-}
-
-.sidebar-container .accordion-header button {
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  color: #fff !important;
-  padding: 0.8rem 1rem;
-  transition: background 0.3s ease, color 0.3s ease;
-}
-
-.sidebar-container .accordion-button:not(.collapsed) {
-  background: rgba(255, 255, 255, 0.15) !important;
-  color: #fff !important;
-}
-
-.sidebar-container .accordion-button:hover {
-  background: rgba(255, 255, 255, 0.25) !important;
-  color: #fff !important;
-}
-
-.sidebar-container {
   position: fixed;
-  top: 95px; /* subito sotto l’header */
+  top: 95px;
   left: 0;
   width: 260px;
   height: calc(100vh - 95px);
@@ -478,28 +435,119 @@ main {
   overflow-y: auto;
   background: #fdf5ef;
   min-height: 100vh;
-  margin-left: 260px; /* lascia spazio per la sidebar fissa */
+  margin-left: 260px;
 }
 
+/* === 🔧 RESPONSIVE (tablet e mobile) === */
 @media (max-width: 992px) {
   .layout-container {
+    display: block;
     flex-direction: column;
   }
 
   .sidebar-container {
     position: relative;
+    top: 0;
+    left: 0;
     width: 100%;
     height: auto;
+    z-index: 100;
     box-shadow: none;
     border-right: none;
-    background: linear-gradient(135deg, #ffb300, #ff7b00);
+    background: linear-gradient(135deg, #ff7b00, #ffb300);
+    padding: 1rem;
+  }
+
+  .sidebar-container .accordion-header button {
+    font-size: 1rem;
+    padding: 0.6rem 1rem;
+  }
+
+  .main-content {
+    margin-left: 0;
+    width: 100%;
+    padding: 1rem;
+    overflow-x: hidden;
+    background: #fff8f0;
+  }
+
+  .restaurant-card {
+    width: 100%;
+    margin-bottom: 1.5rem;
   }
 
   .restaurant-detail-card {
     flex-direction: column;
+    gap: 1.2rem;
+    align-items: center;
+    text-align: center;
+    padding: 1rem;
   }
 
-  .main-content {
+  .restaurant-detail-image-wrapper {
+    width: 100%;
+    max-height: 250px;
+  }
+
+  .restaurant-detail-title {
+    font-size: 1.5rem;
+  }
+
+  .restaurant-detail-description {
+    font-size: 0.95rem;
+  }
+
+  .hero-section {
+    height: 60vh;
     padding: 1rem;
+  }
+
+  .hero-section .title {
+    font-size: 2rem;
+  }
+
+  .hero-section .subtitle {
+    font-size: 1rem;
+  }
+
+  .custom-navbar {
+    min-height: 75px;
+  }
+
+  .restaurant-list-container {
+    padding: 30px 0;
+  }
+
+  footer {
+    font-size: 0.9rem;
+    padding: 1rem 0;
+  }
+}
+
+/* === 👇 MOBILE (sotto 600px) === */
+@media (max-width: 600px) {
+  .restaurant-card {
+    margin-bottom: 1rem;
+  }
+
+  .restaurant-card .card-title {
+    font-size: 1rem;
+  }
+
+  .restaurant-card .btn-dark {
+    font-size: 0.9rem;
+    padding: 0.4rem 0.7rem;
+  }
+
+  .hero-section {
+    height: 50vh;
+  }
+
+  .hero-section .title {
+    font-size: 1.6rem;
+  }
+
+  .hero-section .subtitle {
+    font-size: 0.9rem;
   }
 }
