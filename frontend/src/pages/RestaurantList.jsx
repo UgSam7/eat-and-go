@@ -19,7 +19,7 @@ const RestaurantList = () => {
   const fetchRestaurants = async () => {
     try {
       setLoading(true);
-      const res = await axios.get(`${API_URL}/restaurants`, {
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/restaurants`, {
         params: { region, city },
       });
       setRestaurants(res.data || []);

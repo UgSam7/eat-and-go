@@ -15,7 +15,7 @@ const RestaurantDetail = () => {
     const fetchRestaurant = async () => {
       try {
         setLoading(true);
-        const res = await axios.get(`${API_URL}/restaurants/${id}`);
+        const res = await axios.get(`${import.meta.env.VITE_API_URL}/restaurants/${id}`);
         setRestaurant(res.data);
       } catch (err) {
         setError(err.response?.data?.message || "Errore nel caricamento del ristorante.");

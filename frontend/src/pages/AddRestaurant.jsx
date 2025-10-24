@@ -49,7 +49,7 @@ const AddRestaurant = () => {
       formData.append('cuisineType', cuisineType);
       if (image) formData.append('image', image);
 
-      const res = await axios.post(`${API_URL}/restaurants`, formData, {
+      const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/restaurants`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'multipart/form-data',

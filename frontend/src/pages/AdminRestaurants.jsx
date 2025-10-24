@@ -24,7 +24,7 @@ const AdminRestaurants = () => {
       setLoading(false);
       return;
     }
-    const res = await axios.get(`${API_URL}/restaurants/pending`, {
+    const res = await axios.get(`${import.meta.env.VITE_API_URL}restaurants/pending`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     setRestaurants(res.data || []);
@@ -40,7 +40,7 @@ const AdminRestaurants = () => {
     if (!window.confirm('Vuoi approvare questo ristorante?')) return;
 
     try {
-      await axios.put(`${API_URL}/restaurants/approve/${id}`, {}, {
+      await axios.put(`${import.meta.env.VITE_API_URL}/restaurants/approve/${id}`, {}, {
         headers: getAuthHeader(),
       });
       setRestaurants((prev) => prev.filter((r) => r._id !== id));
@@ -54,7 +54,7 @@ const AdminRestaurants = () => {
     if (!window.confirm('Vuoi davvero eliminare questo ristorante?')) return;
 
     try {
-      await axios.delete(`${API_URL}/restaurants/${id}`, {
+      await axios.delete(`${import.meta.env.VITE_API_URL}/restaurants/${id}`, {
         headers: getAuthHeader(),
       });
       setRestaurants((prev) => prev.filter((r) => r._id !== id));
