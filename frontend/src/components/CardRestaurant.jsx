@@ -1,32 +1,30 @@
 import { Card, Button } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 const CardRestaurant = ({ restaurant }) => {
-  const image =
-    restaurant.image?.url ||
-    restaurant.image?.path ||
-    "/placeholder.jpg";
-
   return (
-    <Card className="restaurant-card-wrapper shadow-lg">
+    <Card className="restaurant-card shadow-sm">
       <Card.Img
         variant="top"
-        classname="restaurant-img"
-        src={restaurant.image?.url || "/placeholder.jpg"}
+        src={restaurant.image?.url || restaurant.image?.path || "/placeholder.jpg"}
+        className="restaurant-img"
         alt={restaurant.name}
       />
-      <Card.Body className="restaurant-card-body">
-        <Card.Title className="restaurant-card-title">
-          {restaurant.name}
-        </Card.Title>
-        <Card.Text className="restaurant-card-description">
-          {restaurant.description}
+      <Card.Body>
+        <Card.Title>{restaurant.name}</Card.Title>
+         <div className="restaurant-meta mb-2">
+          <span className="cuisine-type">{restaurant.cuisineType}</span>
+          {" • "}
+          <span className="price-range">{restaurant.priceRange}</span>
+        </div>
+        <Card.Text>
+          {restaurant.description || "Nessuna descrizione disponibile."}
         </Card.Text>
-        <Card.Text className="text-muted small mb-2">
-          📍 {restaurant.address}
-        </Card.Text>
-        <Button variant="dark" className="restaurant-btn">
-          Scopri di più
-        </Button>
+        <Link to={`/restaurants/${restaurant._id}`}>
+          <Button variant="dark" size="sm">
+            Scopri di più
+          </Button>
+        </Link>
       </Card.Body>
     </Card>
   );

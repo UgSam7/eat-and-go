@@ -2,16 +2,14 @@ import { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
 
 const AuthContext = createContext(null);
-export const useAuth = () => useContext(AuthContext);
+const API_URL = import.meta.env.VITE_API_URL;
 
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4001/api";
-
-axios.interceptors.request.use((config) => {
+const axiosInstance = axios.create({
+  baseURL: API_URL
+});
+axiosInstance.interceptors.request.use(config => {
   const token = localStorage.getItem("token");
-  if (token) {
-    if (!config.headers) config.headers = {};
-    config.headers.Authorization = `Bearer ${token}`;
-  }
+  if (token) config.headers.Authorization = `Bearer ${token}`;
   return config;
 });
 
@@ -26,32 +24,25 @@ export const AuthProvider = ({ children }) => {
         setLoading(false);
         return;
       }
-
       try {
-        const res = await axios.get(`${API_URL}/auth/me`);
+        const res = await axiosInstance.get("/auth/me");
         setUser(res.data);
       } catch (error) {
-        console.error("Errore nel recupero utente:", error?.response?.data || error);
+        console.error("Errore nel recupero utente:", error);
         localStorage.removeItem("token");
-        setUser(null);
       } finally {
         setLoading(false);
       }
     };
-
     checkAuth();
   }, []);
 
-  const login = async (token) => {
+  const login = (token) => {
     localStorage.setItem("token", token);
-    try {
-      const res = await axios.get(`${API_URL}/auth/me`);
-      setUser(res.data);
-    } catch (error) {
-      console.error("Errore durante il login:", error?.response?.data || error);
+    axiosInstance.get("/auth/me").then(res => setUser(res.data)).catch(() => {
       localStorage.removeItem("token");
       setUser(null);
-    }
+    });
   };
 
   const logout = () => {
@@ -60,8 +51,10 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, loading }}>
+    <AuthContext.Provider value={{ user, login, logout, loading, axios: axiosInstance }}>
       {children}
     </AuthContext.Provider>
   );
 };
+
+export const useAuth = () => useContext(AuthContext);

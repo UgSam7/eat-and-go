@@ -1,45 +1,111 @@
-import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import axios from 'axios';
-import { Container, Card, Spinner } from 'react-bootstrap';
+import { useEffect, useState } from "react";
+import { useParams, Link } from "react-router-dom";
+import { Container, Spinner, Alert, Button } from "react-bootstrap";
+import axios from "axios";
+
+const API_URL = import.meta.env.VITE_API_URL;
 
 const RestaurantDetail = () => {
   const { id } = useParams();
   const [restaurant, setRestaurant] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchRestaurant = async () => {
       try {
-        const res = await axios.get(`http://localhost:4001/api/ristoranti/${id}`);
+        setLoading(true);
+        const res = await axios.get(`${API_URL}/restaurants/${id}`);
         setRestaurant(res.data);
-      } catch (error) {
-        console.error('Errore nel caricamento dettagli ristorante', error);
+      } catch (err) {
+        setError(err.response?.data?.message || "Errore nel caricamento del ristorante.");
       } finally {
         setLoading(false);
       }
     };
-
     fetchRestaurant();
   }, [id]);
 
-  if (loading) return <Spinner animation="border" />;
-  if (!restaurant) return <p>Ristorante non trovato.</p>;
+  if (loading)
+    return (
+      <div className="text-center mt-5">
+        <Spinner animation="border" variant="warning" />
+        <p className="mt-3 text-muted">Caricamento dettagli...</p>
+      </div>
+    );
+
+  if (error)
+    return (
+      <Alert variant="danger" className="text-center mt-4">
+        {error}
+      </Alert>
+    );
+
+  if (!restaurant)
+    return (
+      <Alert variant="info" className="text-center mt-4">
+        Ristorante non trovato.
+      </Alert>
+    );
 
   return (
-    <Container className="mt-4">
-      <Card>
-        <Card.Img variant="top" src={restaurant.image || '/default-restaurant.jpg'} />
-        <Card.Body>
-          <Card.Title>{restaurant.name}</Card.Title>
-          <Card.Text>
-            <strong>Regione:</strong> {restaurant.region}<br />
-            <strong>Città:</strong> {restaurant.city}<br />
-            <strong>Indirizzo:</strong> {restaurant.address}<br />
-            <strong>Descrizione:</strong> {restaurant.description}
-          </Card.Text>
-        </Card.Body>
-      </Card>
+    <Container className="restaurant-detail-container">
+      <div className="restaurant-detail-card shadow-sm">
+        <div className="restaurant-detail-image-wrapper">
+          <img
+            src={restaurant.image?.url || "/placeholder.jpg"}
+            alt={restaurant.name}
+            className="restaurant-detail-image"
+          />
+        </div>
+
+        <div className="restaurant-detail-body">
+          <h2 className="restaurant-detail-title">{restaurant.name}</h2>
+
+          <p className="restaurant-detail-description">
+            {restaurant.description || "Nessuna descrizione disponibile."}
+          </p>
+
+          <div className="restaurant-detail-info">
+            {restaurant.cuisineType && (
+              <p>
+                <strong>🍝 Tipo di cucina:</strong> {restaurant.cuisineType}
+              </p>
+            )}
+
+            {restaurant.priceRange && (
+              <p>
+                <strong>💰 Prezzo medio:</strong> {restaurant.priceRange} €
+              </p>
+            )}
+
+            <p>
+              <strong>📍 Indirizzo:</strong> {restaurant.address}
+            </p>
+            <p>
+              <strong>🏙️ Città:</strong> {restaurant.city}
+            </p>
+            <p>
+              <strong>📌 Regione:</strong> {restaurant.region}
+            </p>
+
+            {restaurant.website && (
+              <p>
+                🌐{" "}
+                <a href={restaurant.website} target="_blank" rel="noopener noreferrer">
+                  Visita il sito
+                </a>
+              </p>
+            )}
+          </div>
+
+          <div className="mt-4">
+            <Link to="/restaurants">
+              <Button variant="dark">← Torna ai ristoranti</Button>
+            </Link>
+          </div>
+        </div>
+      </div>
     </Container>
   );
 };

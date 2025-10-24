@@ -1,9 +1,13 @@
-function Footer () {
+import { Container } from "react-bootstrap";
+
+const Footer = () => {
   return (
-    <div className="footer">
-      <p>© 2024 Eat & Go. All rights reserved.</p>
-    </div>
-  )
-}
+    <footer>
+      <Container>
+        <p>© {new Date().getFullYear()} Eat & Go — Tutti i diritti riservati 🍽️</p>
+      </Container>
+    </footer>
+  );
+};
 
 export default Footer;

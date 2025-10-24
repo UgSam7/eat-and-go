@@ -14,8 +14,15 @@ const port = process.env.PORT;
 
 passport.use(strategyGoogle);
 
-server.use(cors());
+const app = express();
 server.use(express.json());
+server.use(
+  cors({
+    origin: process.env.FRONTEND_URL || "*",
+    credentials: true,
+  })
+);
+
 
 
 server.get('/api', (request, response) => response.send());

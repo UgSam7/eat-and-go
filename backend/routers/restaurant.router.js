@@ -42,7 +42,7 @@ router.post(
   uploadCloudinary.single("image"),
   async (req, res, next) => {
     try {
-      const { name, description, address, city, region, website } = req.body;
+      const { name, description, address, city, region, website, priceRannge, cuisineType } = req.body;
 
       if (!req.user) {
         return res.status(401).json({ message: "Utente non autenticato" });
@@ -62,6 +62,8 @@ router.post(
         city,
         region,
         website,
+        priceRannge,
+        cuisineType,
         image: imageData,
         approved: false, 
       });
@@ -130,6 +132,24 @@ router.delete("/:id", authentication, async (req, res, next) => {
     }
 
     res.status(200).json({ message: "Ristorante eliminato", restaurant: deleted });
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get("/:id", async (req, res, next) => {
+  try {
+    const restaurant = await Restaurant.findById(req.params.id);
+
+    if (!restaurant) {
+      return res.status(404).json({ message: "Ristorante non trovato" });
+    }
+
+    if (!restaurant.approved) {
+      return res.status(403).json({ message: "Ristorante non approvato" });
+    }
+
+    res.json(restaurant);
   } catch (error) {
     next(error);
   }
