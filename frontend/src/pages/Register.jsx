@@ -12,11 +12,11 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('/api/auth/register', {
-        firstName,
-        lastName,
+      await axios.post(`${import.meta.env.VITE_API_URL}/auth/register`, {
         email,
         password,
+        firstName,
+        lastName,
       });
 
       alert('Registrazione completata! Effettua il login.');
