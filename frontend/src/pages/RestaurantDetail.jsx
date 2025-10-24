@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { Container, Spinner, Alert, Button } from "react-bootstrap";
+import { Container, Spinner, Alert, Card, Button } from "react-bootstrap";
 import axios from "axios";
 
 const API_URL = import.meta.env.VITE_API_URL;
@@ -15,7 +15,7 @@ const RestaurantDetail = () => {
     const fetchRestaurant = async () => {
       try {
         setLoading(true);
-        const res = await axios.get(`${import.meta.env.VITE_API_URL}/restaurants/${id}`);
+        const res = await axios.get(`${API_URL}/api/restaurants/${id}`);
         setRestaurant(res.data);
       } catch (err) {
         setError(err.response?.data?.message || "Errore nel caricamento del ristorante.");
@@ -34,68 +34,36 @@ const RestaurantDetail = () => {
       </div>
     );
 
-  if (error)
-    return (
-      <Alert variant="danger" className="text-center mt-4">
-        {error}
-      </Alert>
-    );
+  if (error) return <Alert variant="danger" className="text-center mt-4">{error}</Alert>;
 
   if (!restaurant)
-    return (
-      <Alert variant="info" className="text-center mt-4">
-        Ristorante non trovato.
-      </Alert>
-    );
+    return <Alert variant="info" className="text-center mt-4">Ristorante non trovato.</Alert>;
 
   return (
     <Container className="restaurant-detail-container">
-      <div className="restaurant-detail-card shadow-sm">
+      <Card className="restaurant-detail-card shadow-lg">
         <div className="restaurant-detail-image-wrapper">
-          <img
-            src={restaurant.image?.url || "/placeholder.jpg"}
+          <Card.Img
+            src={restaurant.image?.url || restaurant.image?.path || "/placeholder.jpg"}
             alt={restaurant.name}
             className="restaurant-detail-image"
           />
         </div>
 
-        <div className="restaurant-detail-body">
-          <h2 className="restaurant-detail-title">{restaurant.name}</h2>
-
-          <p className="restaurant-detail-description">
+        <Card.Body className="restaurant-detail-body">
+          <Card.Title className="restaurant-detail-title">{restaurant.name}</Card.Title>
+          <Card.Text className="restaurant-detail-description">
             {restaurant.description || "Nessuna descrizione disponibile."}
-          </p>
+          </Card.Text>
 
           <div className="restaurant-detail-info">
-            {restaurant.cuisineType && (
-              <p>
-                <strong>🍝 Tipo di cucina:</strong> {restaurant.cuisineType}
-              </p>
-            )}
-
-            {restaurant.priceRange && (
-              <p>
-                <strong>💰 Prezzo medio:</strong> {restaurant.priceRange} €
-              </p>
-            )}
-
-            <p>
-              <strong>📍 Indirizzo:</strong> {restaurant.address}
-            </p>
-            <p>
-              <strong>🏙️ Città:</strong> {restaurant.city}
-            </p>
-            <p>
-              <strong>📌 Regione:</strong> {restaurant.region}
-            </p>
-
+            <p><strong>Indirizzo:</strong> {restaurant.address}</p>
+            <p><strong>Città:</strong> {restaurant.city}</p>
+            <p><strong>Regione:</strong> {restaurant.region}</p>
+            {restaurant.priceRange && <p><strong>Prezzo medio:</strong> {restaurant.priceRange}</p>}
+            {restaurant.cuisineType && <p><strong>Tipo di cucina:</strong> {restaurant.cuisineType}</p>}
             {restaurant.website && (
-              <p>
-                🌐{" "}
-                <a href={restaurant.website} target="_blank" rel="noopener noreferrer">
-                  Visita il sito
-                </a>
-              </p>
+              <p>🌐 <a href={restaurant.website} target="_blank" rel="noopener noreferrer">Visita il sito</a></p>
             )}
           </div>
 
@@ -104,8 +72,8 @@ const RestaurantDetail = () => {
               <Button variant="dark">← Torna ai ristoranti</Button>
             </Link>
           </div>
-        </div>
-      </div>
+        </Card.Body>
+      </Card>
     </Container>
   );
 };

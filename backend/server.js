@@ -1,41 +1,41 @@
 import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
-import userRouter from './routers/user.router.js';
 import mongoose from 'mongoose';
-import restaurantsRouter from './routers/restaurant.router.js';
 import passport from 'passport';
-import strategyGoogle from './config/passport.config.js';
-import authRouter from './routers/auth.router.js';
-import authentication from './middlewares/authentication.js';
 
-const server = express();
-const port = process.env.PORT;
+import strategyGoogle from './config/passport.config.js';
+import userRouter from './routers/user.router.js';
+import restaurantsRouter from './routers/restaurant.router.js';
+import authRouter from './routers/auth.router.js';
 
 passport.use(strategyGoogle);
 
-const app = express();
+const server = express();
+
 server.use(express.json());
 server.use(
   cors({
-    origin: process.env.FRONTEND_URL || "*",
+    origin: [
+      "http://localhost:5173",
+      "https://eat-and-go-five.vercel.app"
+    ],
     credentials: true,
   })
 );
 
-
-
-server.get('/api', (request, response) => response.send());
+server.get('/', (req, res) => {
+  res.send('Backend Eat&Go attivo!');
+});
 
 server.use('/api/v1/users', userRouter);
 server.use('/api/restaurants', restaurantsRouter);
 server.use('/api/auth', authRouter);
 
+await mongoose.connect(process.env.MONGODB_CONNECTION_URI);
+console.log('Connesso al database MongoDB');
 
-await mongoose
-  .connect(process.env.MONGODB_CONNECTION_URI)
-  .then(() => console.log('Connessi al database'));
-
-server.listen(port, () => {
-  console.log(`Server running on port ${port}`);
+const PORT = process.env.PORT || 4001;
+server.listen(PORT, () => {
+  console.log(`Server attivo su porta ${PORT}`);
 });

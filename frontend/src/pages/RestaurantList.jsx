@@ -19,7 +19,7 @@ const RestaurantList = () => {
   const fetchRestaurants = async () => {
     try {
       setLoading(true);
-      const res = await axios.get(`${import.meta.env.VITE_API_URL}/restaurants`, {
+      const res = await axios.get(`${API_URL}/api/restaurants`, {
         params: { region, city },
       });
       setRestaurants(res.data || []);
@@ -34,7 +34,6 @@ const RestaurantList = () => {
     fetchRestaurants();
   }, [city, region]);
 
-  // === Loader ===
   if (loading)
     return (
       <div className="text-center mt-5">
@@ -43,10 +42,8 @@ const RestaurantList = () => {
       </div>
     );
 
-  // === Error Handling ===
   if (error) return <Alert variant="danger" className="text-center mt-4">{error}</Alert>;
 
-  // === Nessun ristorante ===
   if (!restaurants.length)
     return (
       <Container className="mt-5">
@@ -56,7 +53,6 @@ const RestaurantList = () => {
       </Container>
     );
 
-  // === Lista ristoranti ===
   return (
     <div className="restaurant-list-container">
       <Container>
