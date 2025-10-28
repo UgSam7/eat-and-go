@@ -14,6 +14,7 @@ import { Routes, Route } from 'react-router-dom';
 import Profile from './pages/Profile.jsx';
 import Privacy from './pages/Privacy.jsx';
 import Terms from './pages/Terms.jsx';
+import Contact from './pages/Contact.jsx';
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
             <Route path="/add-restaurant" element={<AddRestaurant />} />
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/terms" element={<Terms />} />
+            <Route path="/contact" element={<Contact />} />
           </Routes>
         </main>
       </div>

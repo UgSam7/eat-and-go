@@ -8,6 +8,7 @@ import strategyGoogle from './config/passport.config.js';
 import userRouter from './routers/user.router.js';
 import restaurantsRouter from './routers/restaurant.router.js';
 import authRouter from './routers/auth.router.js';
+import contactRouter from './routers/contact.router.js';
 
 passport.use(strategyGoogle);
 
@@ -31,6 +32,7 @@ server.get('/', (req, res) => {
 server.use('/api/v1/users', userRouter);
 server.use('/api/restaurants', restaurantsRouter);
 server.use('/api/auth', authRouter);
+server.use("/api/contact", contactRouter);
 
 await mongoose.connect(process.env.MONGODB_CONNECTION_URI);
 console.log('Connesso al database MongoDB');
