@@ -194,9 +194,7 @@ const AddRestaurant = () => {
               accept="image/*"
               onChange={(e) => setImage(e.target.files[0])}
             />
-            <small className="text-muted">
-              L'immagine verrà caricata su Cloudinary dal backend.
-            </small>
+
           </Form.Group>
 
           <div className="text-center">

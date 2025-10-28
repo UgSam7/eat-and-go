@@ -14,7 +14,7 @@ const Sidebar = () => {
               <Nav.Link
                 as={Link}
                 to="/add-restaurant"
-                className="fw-semibold text-white mb-2"
+                className="fw-semibold text-black mb-2"
               >
                 ➕ Aggiungi ristorante
               </Nav.Link>

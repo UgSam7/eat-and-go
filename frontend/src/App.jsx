@@ -12,6 +12,8 @@ import AddRestaurant from './pages/AddRestaurant.jsx';
 import AdminRestaurants from './pages/AdminRestaurants.jsx';
 import { Routes, Route } from 'react-router-dom';
 import Profile from './pages/Profile.jsx';
+import Privacy from './pages/Privacy.jsx';
+import Terms from './pages/Terms.jsx';
 
 function App() {
   return (
@@ -33,6 +35,8 @@ function App() {
             <Route path="/restaurants/:id" element={<RestaurantDetail />} />
             <Route path="/admin/restaurants" element={<AdminRestaurants />} />
             <Route path="/add-restaurant" element={<AddRestaurant />} />
+            <Route path="/privacy" element={<Privacy />} />
+            <Route path="/terms" element={<Terms />} />
           </Routes>
         </main>
       </div>
