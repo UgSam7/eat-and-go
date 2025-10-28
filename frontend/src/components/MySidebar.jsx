@@ -5,12 +5,10 @@ const Sidebar = () => {
   return (
     <aside className="sidebar-container">
       <Accordion defaultActiveKey="0" flush alwaysOpen>
-        {/* --- Sezione Ristoranti --- */}
         <Accordion.Item eventKey="0">
           <Accordion.Header>Ristoranti</Accordion.Header>
           <Accordion.Body>
             <Nav className="flex-column">
-              {/* ➕ Link aggiungi ristorante */}
               <Nav.Link
                 as={Link}
                 to="/add-restaurant"
@@ -19,10 +17,8 @@ const Sidebar = () => {
                 ➕ Aggiungi ristorante
               </Nav.Link>
 
-              {/* Divider sottile */}
               <div className="border-top border-light-subtle my-2"></div>
 
-              {/* --- Sottosezione regioni --- */}
               <Accordion flush>
                 <Accordion.Item eventKey="0-0">
                   <Accordion.Header style={{ paddingLeft: "1rem" }}>
@@ -50,12 +46,11 @@ const Sidebar = () => {
           </Accordion.Body>
         </Accordion.Item>
 
-        {/* --- Sezione Contatti --- */}
         <Accordion.Item eventKey="1">
           <Accordion.Header>Contatti</Accordion.Header>
           <Accordion.Body>
-            <Nav.Link as={Link} to="/contacts">
-              Contattaci
+            <Nav.Link as={Link} to="/contact">
+              📩 Contattaci
             </Nav.Link>
           </Accordion.Body>
         </Accordion.Item>

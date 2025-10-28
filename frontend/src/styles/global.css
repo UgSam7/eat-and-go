@@ -581,3 +581,15 @@ html, body {
 .text-warning {
   color: #ff7b00 !important;
 }
+
+footer {
+  margin-left: 260px;
+  width: calc(100% - 260px);
+}
+
+@media (max-width: 992px) {
+  footer {
+    margin-left: 0;
+    width: 100%;
+  }
+}
