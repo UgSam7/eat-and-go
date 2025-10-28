@@ -15,7 +15,7 @@ router.post("/", async (req, res) => {
   try {
     const data = await resend.emails.send({
       from: "Eat&Go <onboarding@resend.dev>",
-      to: "eatandgo.contact@gmail.com",
+      to: "samuelemasche7@icloud.com",
       subject: `Nuovo messaggio da ${firstName} ${lastName}`,
       text: `Email: ${email}\n\nMessaggio:\n${message}`,
     });
