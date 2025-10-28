@@ -1,7 +1,8 @@
 import express from "express";
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
 
 const router = express.Router();
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 router.post("/", async (req, res) => {
   const { firstName, lastName, email, message } = req.body;
@@ -10,17 +11,9 @@ router.post("/", async (req, res) => {
     return res.status(400).json({ error: "Tutti i campi sono obbligatori" });
 
   try {
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: process.env.CONTACT_EMAIL,
-        pass: process.env.CONTACT_PASS,
-      },
-    });
-
-    await transporter.sendMail({
-      from: `"Eat&Go - Contatto" <${process.env.CONTACT_EMAIL}>`,
-      to: process.env.CONTACT_EMAIL,
+    await resend.emails.send({
+      from: "Eat&Go <onboarding@resend.dev>", 
+      to: "eatandgo.contact@gmail.com", 
       subject: `Nuovo messaggio da ${firstName} ${lastName}`,
       text: `Email: ${email}\n\nMessaggio:\n${message}`,
     });
