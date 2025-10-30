@@ -15,7 +15,6 @@ html, body {
   -webkit-overflow-scrolling: touch;
 }
 
-/* === ROOT === */
 #root {
   min-height: 100vh;
   display: flex;
