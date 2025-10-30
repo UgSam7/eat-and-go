@@ -2,6 +2,7 @@ import { Navbar, Nav, Container, NavDropdown } from "react-bootstrap";
 import { FaUserCircle } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import logo from "../assets/eatandgo.png";
 import "../styles/global.css";
 
 const Header = () => {
@@ -15,21 +16,18 @@ const Header = () => {
 
   return (
     <Navbar expand="lg" className="custom-navbar shadow-sm py-3" sticky="top">
-      <Container>
-        {/* Logo Testuale Animato */}
-        <Navbar.Brand as={Link} to="/" className="logo-text">
-          <span className="logo-eat">Eat</span>
-          <span className="logo-and">&</span>
-          <span className="logo-go">Go</span>
+      <Container fluid className="navbar-container">
+        <Navbar.Brand as={Link} to="/" className="logo-link">
+          <img
+            src={logo}
+            alt="Eat&Go Logo"
+            className="site-logo"
+          />
         </Navbar.Brand>
 
         <Navbar.Toggle aria-controls="main-navbar" />
         <Navbar.Collapse id="main-navbar">
-          {/* Sezione navigazione */}
           <Nav className="me-auto">
-            <Nav.Link as={Link} to="/restaurants" className="nav-item-custom">
-              🍝 Ristoranti
-            </Nav.Link>
 
             {user?.role === "superadmin" && (
               <Nav.Link as={Link} to="/admin/restaurants" className="nav-item-custom">
@@ -38,7 +36,6 @@ const Header = () => {
             )}
           </Nav>
 
-          {/* Sezione utente */}
           <Nav>
             {user ? (
               <NavDropdown

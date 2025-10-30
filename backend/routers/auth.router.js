@@ -107,11 +107,11 @@ router.get("/login-google", passport.authenticate("google", { scope: ["profile",
 router.get("/google/callback", (req, res, next) => {
   passport.authenticate("google", { session: false }, (err, data) => {
     if (err || !data) {
-      return res.redirect(`${process.env.FRONTEND_URL}/login?error=oauth_failed`);
+      return res.redirect(`${process.env.FRONTEND_HOST}/login?error=oauth_failed`);
     }
 
     const { jwt } = data;
-    return res.redirect(`${process.env.FRONTEND_URL}/login?token=${jwt}`);
+    return res.redirect(`${process.env.FRONTEND_HOST}/login?token=${jwt}`);
   })(req, res, next);
 });
 

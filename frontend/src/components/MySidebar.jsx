@@ -1,44 +1,76 @@
 import { Accordion, Nav } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { FaUtensils, FaPlusCircle, FaEnvelope, FaMapMarkerAlt } from "react-icons/fa";
+import "../styles/global.css";
 
 const Sidebar = () => {
   return (
-    <aside className="sidebar-container">
+    <aside className="sidebar-container modern-sidebar">
       <Accordion defaultActiveKey="0" flush alwaysOpen>
-        <Accordion.Item eventKey="0">
-          <Accordion.Header>Ristoranti</Accordion.Header>
+        
+        {/* === RISTORANTI === */}
+        <Accordion.Item eventKey="0" className="sidebar-section">
+          <Accordion.Header>
+            <FaUtensils className="sidebar-icon" /> Ristoranti
+          </Accordion.Header>
           <Accordion.Body>
-            <Nav className="flex-column">
+            <Nav className="flex-column sidebar-nav-group">
+
+              {/* Aggiungi ristorante */}
               <Nav.Link
                 as={Link}
                 to="/add-restaurant"
-                className="fw-semibold text-black mb-2"
+                className="sidebar-link"
               >
-                ➕ Aggiungi ristorante
+                <FaPlusCircle className="me-2" /> Aggiungi ristorante
               </Nav.Link>
 
-              <div className="border-top border-light-subtle my-2"></div>
+              {/* Tutti i ristoranti */}
+              <Nav.Link
+                as={Link}
+                to="/restaurants"
+                className="sidebar-link"
+              >
+                🍽️ Tutti i ristoranti
+              </Nav.Link>
 
+              <div className="sidebar-divider"></div>
+
+              {/* === ESPLORA PER REGIONE === */}
               <Accordion flush>
                 <Accordion.Item eventKey="0-0">
-                  <Accordion.Header style={{ paddingLeft: "1rem" }}>
-                    Piemonte
+                  <Accordion.Header>
+                    <FaMapMarkerAlt className="sidebar-icon" /> Esplora per regione
                   </Accordion.Header>
-                  <Accordion.Body style={{ paddingLeft: "2rem" }}>
-                    <Nav className="flex-column">
-                      <Nav.Link
-                        as={Link}
-                        to="/restaurants?region=Piemonte&city=Torino"
-                      >
-                        Torino
-                      </Nav.Link>
-                      <Nav.Link
-                        as={Link}
-                        to="/restaurants?region=Piemonte&city=Asti"
-                      >
-                        Asti
-                      </Nav.Link>
-                    </Nav>
+                  <Accordion.Body>
+
+                    {/* Regione: Piemonte */}
+                    <Accordion flush>
+                      <Accordion.Item eventKey="0-0-0">
+                        <Accordion.Header>
+                          <span className="sidebar-region">Piemonte</span>
+                        </Accordion.Header>
+                        <Accordion.Body>
+                          <Nav className="flex-column">
+                            <Nav.Link
+                              as={Link}
+                              to="/restaurants?region=Piemonte&city=Torino"
+                              className="sidebar-sublink"
+                            >
+                              Torino
+                            </Nav.Link>
+                            <Nav.Link
+                              as={Link}
+                              to="/restaurants?region=Piemonte&city=Asti"
+                              className="sidebar-sublink"
+                            >
+                              Asti
+                            </Nav.Link>
+                          </Nav>
+                        </Accordion.Body>
+                      </Accordion.Item>
+                    </Accordion>
+
                   </Accordion.Body>
                 </Accordion.Item>
               </Accordion>
@@ -46,10 +78,13 @@ const Sidebar = () => {
           </Accordion.Body>
         </Accordion.Item>
 
-        <Accordion.Item eventKey="1">
-          <Accordion.Header>Contatti</Accordion.Header>
+        {/* === CONTATTI === */}
+        <Accordion.Item eventKey="1" className="sidebar-section">
+          <Accordion.Header>
+            <FaEnvelope className="sidebar-icon" /> Contatti
+          </Accordion.Header>
           <Accordion.Body>
-            <Nav.Link as={Link} to="/contact">
+            <Nav.Link as={Link} to="/contact" className="sidebar-link">
               📩 Contattaci
             </Nav.Link>
           </Accordion.Body>
