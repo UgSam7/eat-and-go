@@ -16,6 +16,10 @@ router.post("/", contactLimiter, async (req, res) => {
     return res.status(400).json({ error: "Tutti i campi sono obbligatori" });
   }
 
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+    return res.status(400).json({ error: "Email non valida" });
+  }
+
   // Destinatario dei messaggi: CONTACT_TO_EMAIL se presente, altrimenti CONTACT_EMAIL
   const to = process.env.CONTACT_TO_EMAIL || process.env.CONTACT_EMAIL;
   if (!to) {
@@ -24,12 +28,20 @@ router.post("/", contactLimiter, async (req, res) => {
   }
 
   try {
-    await resend.emails.send({
-      from: "Eat&Go <onboarding@resend.dev>",
+    // Mittente: un indirizzo del dominio verificato su Resend (CONTACT_FROM_EMAIL).
+    // Senza, si usa il mittente di prova di Resend, che consegna solo al proprietario dell'account.
+    const from = process.env.CONTACT_FROM_EMAIL || "onboarding@resend.dev";
+
+    const { error } = await resend.emails.send({
+      from: `Eat&Go <${from}>`,
       to,
+      replyTo: email,
       subject: `Nuovo messaggio da ${firstName} ${lastName}`.replace(/[\r\n]+/g, " "),
       text: `Email: ${email}\n\nMessaggio:\n${message}`,
     });
+
+    // Il client Resend non lancia eccezioni: restituisce { error }
+    if (error) throw new Error(error.message);
 
     res.json({ success: true });
   } catch (error) {
