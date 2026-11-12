@@ -45,4 +45,4 @@ Repo:
 - `helpers/regex.js` `escapeRegex` per ogni `new RegExp(input)`.
 - `middlewares/rateLimit.js`: login 10/15min, register 10/ora, contatti 5/15min (per IP; `trust proxy` attivo in `server.js`).
 - Dopo login Google il token arriva in `FRONTEND_HOST/login#token=...` (fragment, non query). `Login.jsx` legge `location.hash`.
-- Nessun log di token, header Authorization o profilo Google. Destinatario del form contatti da env `CONTACT_TO_EMAIL` (obbligatoria).
+- Nessun log di token, header Authorization o profilo Google. Destinatario del form contatti da env `CONTACT_TO_EMAIL`, con ripiego su `CONTACT_EMAIL` (su Render esiste solo `CONTACT_EMAIL`).

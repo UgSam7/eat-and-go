@@ -16,9 +16,10 @@ router.post("/", contactLimiter, async (req, res) => {
     return res.status(400).json({ error: "Tutti i campi sono obbligatori" });
   }
 
-  const to = process.env.CONTACT_TO_EMAIL;
+  // Destinatario dei messaggi: CONTACT_TO_EMAIL se presente, altrimenti CONTACT_EMAIL
+  const to = process.env.CONTACT_TO_EMAIL || process.env.CONTACT_EMAIL;
   if (!to) {
-    console.error("CONTACT_TO_EMAIL non configurata");
+    console.error("Né CONTACT_TO_EMAIL né CONTACT_EMAIL sono configurate");
     return res.status(500).json({ error: "Servizio contatti non configurato" });
   }
 
