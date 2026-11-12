@@ -6,15 +6,16 @@ import UserModel from "../models/User.js";
 import createHttpError from "http-errors";
 import { generateJWT } from "../helpers/jwt.js";
 import authentication from "../middlewares/authentication.js";
+import { createRateLimiter } from "../middlewares/rateLimit.js";
 import dotenv from "dotenv";
 dotenv.config();
 
 const router = Router();
 
-const SUPER_ADMIN_EMAIL = process.env.SUPER_ADMIN_EMAIL;
-const ADMIN_EMAILS = process.env.ADMIN_EMAILS?.split(",") || [];
+const loginLimiter = createRateLimiter({ windowMs: 15 * 60 * 1000, max: 10 });
+const registerLimiter = createRateLimiter({ windowMs: 60 * 60 * 1000, max: 10 });
 
-router.post("/register", async (req, res, next) => {
+router.post("/register", registerLimiter, async (req, res, next) => {
   try {
     const { email, password, firstName, lastName } = req.body;
 
@@ -36,13 +37,9 @@ router.post("/register", async (req, res, next) => {
       lastName,
     });
 
-    if (newUser.email === SUPER_ADMIN_EMAIL) {
-      newUser.role = "superadmin";
-    } else if (ADMIN_EMAILS.includes(newUser.email)) {
-      newUser.role = "admin";
-    } else {
-      newUser.role = "user";
-    }
+    // Registrazione manuale: sempre "user". L'email non è verificata, quindi
+    // i privilegi admin si ottengono solo via Google (vedi passport.config.js).
+    newUser.role = "user";
 
     await newUser.save();
 
@@ -52,12 +49,17 @@ router.post("/register", async (req, res, next) => {
   }
 });
 
-router.post('/login', async (req, res, next) => {
+router.post('/login', loginLimiter, async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
+    if (typeof email !== 'string' || typeof password !== 'string') {
+      return next(createHttpError.BadRequest('Email e password obbligatorie'));
+    }
+
     const user = await User.findOne({ email: email.toLowerCase() }).select('+password');
-    if (!user) return next(createHttpError.Unauthorized('Credenziali non valide'));
+    // gli utenti Google non hanno password: stesso errore generico
+    if (!user || !user.password) return next(createHttpError.Unauthorized('Credenziali non valide'));
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) return next(createHttpError.Unauthorized('Credenziali non valide'));
@@ -111,7 +113,8 @@ router.get("/google/callback", (req, res, next) => {
     }
 
     const { jwt } = data;
-    return res.redirect(`${process.env.FRONTEND_HOST}/login?token=${jwt}`);
+    // Il token va nel fragment (#): non viene inviato a server né in Referer
+    return res.redirect(`${process.env.FRONTEND_HOST}/login#token=${jwt}`);
   })(req, res, next);
 });
 

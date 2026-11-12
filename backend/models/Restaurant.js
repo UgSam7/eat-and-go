@@ -11,7 +11,8 @@ const restaurantSchema = new Schema({
   website: String,
   priceRange: {
     type: String,
-    enum: ["10-15", "15-20", "20+"],
+    // "20+" resta per i documenti già salvati
+    enum: ["10-15", "15-20", "20-30", "30+", "20+"],
     default: "15-20"
   },
   cuisineType: {
@@ -26,7 +27,11 @@ const restaurantSchema = new Schema({
       "Internazionale",
       "Altro"
     ],
-    set: v => v.charAt(0).toUpperCase() + v.slice(1).toLowerCase(), // normalizza input
+    // normalizza input; vuoto/non stringa -> "Altro"
+    set: v =>
+      typeof v === "string" && v.trim()
+        ? v.trim().charAt(0).toUpperCase() + v.trim().slice(1).toLowerCase()
+        : "Altro",
     default: "Altro"
   },
   image: {

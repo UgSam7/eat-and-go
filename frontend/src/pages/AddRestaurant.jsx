@@ -3,6 +3,12 @@ import { Form, Button, Container, Card, Spinner, Alert, Row, Col } from 'react-b
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 
+// Devono coincidere con l'enum di backend/models/Restaurant.js
+const CUISINE_TYPES = [
+  'Italiana', 'Giapponese', 'Cinese', 'Messicana',
+  'Indiana', 'Vegetariana', 'Internazionale', 'Altro',
+];
+
 const AddRestaurant = () => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -10,8 +16,8 @@ const AddRestaurant = () => {
   const [city, setCity] = useState('');
   const [region, setRegion] = useState('');
   const [website, setWebsite] = useState('');
-  const [priceRange, setPriceRange] = useState('€€');
-  const [cuisineType, setCuisineType] = useState('');
+  const [priceRange, setPriceRange] = useState('15-20');
+  const [cuisineType, setCuisineType] = useState('Altro');
   const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
@@ -63,8 +69,8 @@ const AddRestaurant = () => {
       setCity('');
       setRegion('');
       setWebsite('');
-      setPriceRange('€€');
-      setCuisineType('');
+      setPriceRange('15-20');
+      setCuisineType('Altro');
       setImage(null);
     } catch (err) {
       console.error(err);
@@ -177,12 +183,14 @@ const AddRestaurant = () => {
             <Col md={6}>
               <Form.Group className="mb-3">
                 <Form.Label>🍝 Tipo di cucina</Form.Label>
-                <Form.Control
-                  type="text"
+                <Form.Select
                   value={cuisineType}
                   onChange={(e) => setCuisineType(e.target.value)}
-                  placeholder="Es. Italiana, Giapponese, Pizzeria..."
-                />
+                >
+                  {CUISINE_TYPES.map((c) => (
+                    <option key={c} value={c}>{c}</option>
+                  ))}
+                </Form.Select>
               </Form.Group>
             </Col>
           </Row>

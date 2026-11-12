@@ -11,14 +11,15 @@ function Login() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const params = new URLSearchParams(location.search);
+    // Il token arriva nel fragment (#token=...) dopo il login Google
+    const params = new URLSearchParams(location.hash.replace(/^#/, ""));
     const tokenFromUrl = params.get("token");
 
     if (tokenFromUrl) {
       login(tokenFromUrl);
-      navigate("/");
+      navigate("/", { replace: true });
     }
-  }, [location.search, login, navigate]);
+  }, [location.hash, login, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

@@ -1,4 +1,4 @@
-@base=http://localhost:4001/api/v1
+@base=http://localhost:4001/api/auth
 
 ###
 POST {{base}}/register
@@ -6,16 +6,23 @@ Content-Type: application/json
 
 {
     "firstName": "Giovedino",
-    "email": "vcxzqwer@asdf.asdf",
-    "password": "adsf"
+    "lastName": "Test",
+    "email": "test@example.com",
+    "password": "password123"
 }
 
 ###
+# @name login
 POST {{base}}/login
 Content-Type: application/json
 
 {
-    "firstName": "Giovedino",
-    "email": "vaxzqwer@asdf.asdf",
-    "password": "adsf"
+    "email": "test@example.com",
+    "password": "password123"
 }
+
+###
+@token = {{login.response.body.token}}
+
+GET {{base}}/me
+Authorization: Bearer {{token}}

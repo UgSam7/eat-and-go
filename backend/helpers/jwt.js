@@ -2,10 +2,8 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 dotenv.config();
 
-console.log("[JWT DEBUG] JWT_SECRET:", process.env.JWT_SECRET ? "✅ caricato" : "❌ mancante");
-
 const JWT_SECRET = process.env.JWT_SECRET;
-const JWT_EXPIRES_IN = "7d";
+const JWT_EXPIRES_IN = "1d";
 
 export const generateJWT = (payload) => {
   return new Promise((resolve, reject) => {

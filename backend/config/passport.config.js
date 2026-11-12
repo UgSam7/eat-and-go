@@ -1,6 +1,7 @@
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import { generateJWT } from '../helpers/jwt.js';
 import User from '../models/User.js';
+import { roleForEmail } from '../middlewares/authorization.js';
 
 const strategyGoogle = new GoogleStrategy(
   {
@@ -11,8 +12,6 @@ const strategyGoogle = new GoogleStrategy(
 
   async (accessToken, refreshToken, profile, done) => {
     try {
-      console.log("Google profile ricevuto:", profile);
-
       let user = await User.findOne({ googleId: profile.id });
 
       if (!user) {
@@ -25,6 +24,16 @@ const strategyGoogle = new GoogleStrategy(
             : null,
           googleId: profile.id,
         });
+      }
+
+      // L'email Google è verificata: qui (e solo qui) si assegnano i ruoli admin da env.
+      // Si promuove soltanto, non si declassa mai.
+      if (profile._json.email_verified !== false) {
+        const expectedRole = roleForEmail(user.email);
+        if (expectedRole !== "user" && user.role !== expectedRole) {
+          user.role = expectedRole;
+          await user.save();
+        }
       }
 
       

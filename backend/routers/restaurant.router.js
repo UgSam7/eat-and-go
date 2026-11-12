@@ -2,32 +2,18 @@ import { Router } from "express";
 import Restaurant from "../models/Restaurant.js";
 import authentication from "../middlewares/authentication.js";
 import { uploadCloudinary } from "../middlewares/uploadCloudinary.js";
+import { isAdmin } from "../middlewares/authorization.js";
+import { escapeRegex } from "../helpers/regex.js";
 
 const router = Router();
-
-function isAdmin(user) {
-  if (!user) return false;
-
-  const superAdmin = process.env.SUPER_ADMIN_EMAIL?.toLowerCase();
-  const admins = process.env.ADMIN_EMAILS?.split(",").map(e => e.trim().toLowerCase()) || [];
-
-  const userEmail = user.email?.toLowerCase();
-
-  if (user.role === "superadmin") return true;
-  if (user.role === "admin") return true;
-  if (superAdmin && userEmail === superAdmin) return true;
-  if (admins.includes(userEmail)) return true;
-
-  return false;
-}
 
 router.get("/", async (req, res, next) => {
   try {
     const { city, region } = req.query;
     const filter = { approved: true };
 
-    if (region) filter.region = new RegExp(region, "i");
-    if (city) filter.city = new RegExp(city, "i");
+    if (region) filter.region = new RegExp(escapeRegex(region), "i");
+    if (city) filter.city = new RegExp(escapeRegex(city), "i");
 
     const restaurants = await Restaurant.find(filter).sort({ createdAt: -1 });
     res.status(200).json(restaurants);
@@ -42,7 +28,7 @@ router.post(
   uploadCloudinary.single("image"),
   async (req, res, next) => {
     try {
-      const { name, description, address, city, region, website, priceRannge, cuisineType } = req.body;
+      const { name, description, address, city, region, website, priceRange, cuisineType } = req.body;
 
       if (!req.user) {
         return res.status(401).json({ message: "Utente non autenticato" });
@@ -62,7 +48,7 @@ router.post(
         city,
         region,
         website,
-        priceRannge,
+        priceRange,
         cuisineType,
         image: imageData,
         approved: false, 
@@ -84,7 +70,6 @@ router.post(
 router.get("/pending", authentication, async (req, res, next) => {
   try {
     const user = req.user;
-    console.log("Utente autenticato nel router:", user?.email, user?.role);
 
     if (!isAdmin(user)) {
       return res.status(403).json({ message: "Accesso negato: non sei admin" });

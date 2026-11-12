@@ -54,7 +54,7 @@ const AdminRestaurants = () => {
     if (!window.confirm('Vuoi davvero eliminare questo ristorante?')) return;
 
     try {
-      await axios.delete(`${import.meta.env.VITE_API_URL}/restaurants/${id}`, {
+      await axios.delete(`${import.meta.env.VITE_API_URL}/api/restaurants/${id}`, {
         headers: getAuthHeader(),
       });
       setRestaurants((prev) => prev.filter((r) => r._id !== id));
@@ -86,10 +86,10 @@ const AdminRestaurants = () => {
         {restaurants.map((r) => (
           <Col key={r._id} md={4} className="mb-3">
             <Card className="shadow-sm">
-              {r.image?.path && (
+              {(r.image?.url || r.image?.path) && (
                 <Card.Img
                   variant="top"
-                  src={r.image.path}
+                  src={r.image.url || r.image.path}
                   alt={r.name}
                   style={{ height: '200px', objectFit: 'cover' }}
                 />

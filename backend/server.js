@@ -14,6 +14,9 @@ passport.use(strategyGoogle);
 
 const server = express();
 
+// Dietro proxy (Render): necessario per avere l'IP reale nel rate limiting
+server.set('trust proxy', 1);
+
 server.use(express.json());
 server.use(
   cors({

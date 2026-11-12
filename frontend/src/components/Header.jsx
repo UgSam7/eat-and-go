@@ -29,7 +29,7 @@ const Header = () => {
         <Navbar.Collapse id="main-navbar">
           <Nav className="me-auto">
 
-            {user?.role === "superadmin" && (
+            {["admin", "superadmin"].includes(user?.role) && (
               <Nav.Link as={Link} to="/admin/restaurants" className="nav-item-custom">
                 🧑‍💼 Admin
               </Nav.Link>

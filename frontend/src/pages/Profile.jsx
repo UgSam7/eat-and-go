@@ -1,44 +1,24 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 function Profile() {
-  const { token, logout } = useAuth();
-  const [user, setUser] = useState(null);
-  const [error, setError] = useState("");
+  const { user, logout, loading } = useAuth();
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        // ✅ Recupera il token dallo stato o dal localStorage
-        const storedToken = token || localStorage.getItem("token");
-        if (!storedToken) return;
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+  };
 
-        // ✅ Effettua la chiamata API con il token corretto
-        const res = await axios.get(
-          `${import.meta.env.VITE_API_URL}/api/auth/me`,
-          {
-            headers: { Authorization: `Bearer ${storedToken}` },
-          }
-        );
-
-        setUser(res.data);
-      } catch (err) {
-        console.error("Errore nel caricamento del profilo:", err);
-        setError("Errore durante il caricamento del profilo utente.");
-      }
-    };
-
-    fetchProfile();
-  }, [token]);
-
-  if (error)
-    return (
-      <div className="alert alert-danger mt-5 text-center">{error}</div>
-    );
+  if (loading)
+    return <div className="text-center mt-5">Caricamento profilo...</div>;
 
   if (!user)
-    return <div className="text-center mt-5">Caricamento profilo...</div>;
+    return (
+      <div className="alert alert-warning mt-5 text-center">
+        Devi effettuare il login per vedere il profilo.
+      </div>
+    );
 
   return (
     <div className="container mt-5" style={{ maxWidth: "500px" }}>
@@ -51,7 +31,7 @@ function Profile() {
         <p><strong>Ruolo:</strong> {user.role}</p>
 
         <div className="text-center mt-4">
-          <button className="btn btn-danger" onClick={logout}>
+          <button className="btn btn-danger" onClick={handleLogout}>
             Esci
           </button>
         </div>

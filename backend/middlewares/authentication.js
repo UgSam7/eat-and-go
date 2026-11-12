@@ -11,15 +11,12 @@ export default async function authentication(req, res, next) {
   try {
     const authHeader = req.headers.authorization;
 
-    console.log(">>> [AUTH] Header Authorization:", authHeader);
-
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
       throw createHttpError.Unauthorized("Token mancante");
     }
 
     const token = authHeader.split(" ")[1];
     const decoded = jwt.verify(token, JWT_SECRET);
-    console.log("[AUTH] Token decodificato:", decoded);
 
     // Cerca l’utente nel DB
     const user = await User.findById(decoded.userId);
@@ -29,7 +26,6 @@ export default async function authentication(req, res, next) {
 
     // Attacca l’utente a req
     req.user = user;
-    console.log("[AUTH] Utente autenticato:", user.email);
 
     next();
   } catch (error) {
