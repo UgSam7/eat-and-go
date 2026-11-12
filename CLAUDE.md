@@ -6,7 +6,7 @@ Sito dove gli utenti propongono ristoranti economici per la pausa pranzo; un adm
 - `backend/` Node (ESM) + Express 5 + MongoDB (Mongoose). Entry: `server.js`.
 - `frontend/` React 19 + Vite + React-Bootstrap + React Router 7. Deploy Vercel (frontend), Render (backend).
 - Root `package.json`: `npm run dev` avvia backend (nodemon) e frontend insieme (concurrently).
-- `node_modules` e' tracciato in git (da rimuovere, vedi Problemi noti).
+- `.gitignore` nella root ignora `node_modules`, `.env*` (tranne `.env.example`), `dist`, log e `.DS_Store`. Backend e frontend hanno ciascuno le proprie dipendenze dichiarate (`npm ci` in ognuno); il `node_modules` della root serve solo a `concurrently` per `npm run dev`.
 
 ## Backend
 - Rotte: `/api/auth` (register, login, me, login-google, google/callback), `/api/restaurants`, `/api/contact`, `/api/v1/users`.
@@ -38,7 +38,7 @@ Sicurezza (residuo; il resto e' stato sistemato, vedi sezione sotto):
 - Un account creato a mano con l'email di un admin blocca il login Google di quell'admin (email duplicata, `unique`).
 - Rate limiter in memoria (per istanza, si azzera al riavvio).
 Repo:
-- `node_modules` e `.DS_Store` tracciati; README vuoti; il `proxy` in `vite.config.js` (punta a Render) e' inutilizzato perche' le chiamate usano `VITE_API_URL` assoluto.
+- README vuoti; la cronologia git contiene ancora `node_modules` (`.git` ~168 MB), ripulirla richiederebbe `git filter-repo` + force push (non fatto); il `proxy` in `vite.config.js` (punta a Render) e' inutilizzato perche' le chiamate usano `VITE_API_URL` assoluto.
 
 ## Sicurezza: com'e' fatta ora
 - `middlewares/authorization.js`: `isAdmin`, `requireAdmin`, `requireSelfOrAdmin`. Tutte le rotte `/api/v1/users` richiedono login; lista/elimina solo admin; GET/PUT/PATCH sull'utente stesso o admin. `PUT` accetta solo `firstName/lastName/email` (mai `role`). La `POST` utenti e' stata rimossa (c'e' `/api/auth/register`).

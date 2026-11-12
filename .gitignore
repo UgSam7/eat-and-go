@@ -1,0 +1,14 @@
+# Dipendenze
+node_modules/
+
+# Segreti locali (usa .env.example come modello)
+.env
+.env.*
+!.env.example
+
+# Build e log
+dist/
+*.log
+
+# File di sistema
+.DS_Store
